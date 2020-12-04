@@ -6,7 +6,7 @@
 		<base href="<?php $this->eprint($this->ROOT_URL); ?>" />
 		<title><?php $this->eprint($this->title); ?></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="description" content="Despesnsa Esforço v1.0 " />
+		<meta name="description" content="Despesnsa Esforço v2.0 " />
 		<meta name="author" content="phreeze builder | phreeze.com" />
 
 		<!-- Le styles -->
@@ -59,9 +59,11 @@
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span>
 						</a>
-						<a class="brand" href="./">Despesnsa Esforço v1.0 </a>
+						<a class="brand" href="./">Despesnsa Esforço v2.0 </a>
 						<div class="nav-collapse collapse">
 							<ul class="nav">
+								<li <?php if ($this->nav=='categorias') { echo 'class="active"'; } ?>><a href="./categorias">Categorias</a></li>
+								<li <?php if ($this->nav=='enderecoentregas') { echo 'class="active"'; } ?>><a href="./enderecoentregas">EnderecoEntregas</a></li>
 								<li <?php if ($this->nav=='metodopagamentos') { echo 'class="active"'; } ?>><a href="./metodopagamentos">MetodoPagamentos</a></li>
 								<li <?php if ($this->nav=='produtos') { echo 'class="active"'; } ?>><a href="./produtos">Produtos</a></li>
 								</ul>

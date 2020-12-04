@@ -1,5 +1,5 @@
 /**
- * backbone model definitions for Despesnsa Esforço v1.0 
+ * backbone model definitions for Despesnsa Esforço v2.0 
  */
 
 /**

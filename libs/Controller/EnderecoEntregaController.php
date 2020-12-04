@@ -3,10 +3,10 @@
 
 /** import supporting libraries */
 require_once("AppBaseController.php");
-require_once("Model/Produto.php");
+require_once("Model/EnderecoEntrega.php");
 
 /**
- * ProdutoController is the controller class for the Produto object.  The
+ * EnderecoEntregaController is the controller class for the EnderecoEntrega object.  The
  * controller is responsible for processing input from the user, reading/updating
  * the model as necessary and displaying the appropriate view.
  *
@@ -14,7 +14,7 @@ require_once("Model/Produto.php");
  * @author ClassBuilder
  * @version 1.0
  */
-class ProdutoController extends AppBaseController
+class EnderecoEntregaController extends AppBaseController
 {
 
 	/**
@@ -33,7 +33,7 @@ class ProdutoController extends AppBaseController
 	}
 
 	/**
-	 * Displays a list view of Produto objects
+	 * Displays a list view of EnderecoEntrega objects
 	 */
 	public function ListView()
 	{
@@ -41,18 +41,18 @@ class ProdutoController extends AppBaseController
 	}
 
 	/**
-	 * API Method queries for Produto records and render as JSON
+	 * API Method queries for EnderecoEntrega records and render as JSON
 	 */
 	public function Query()
 	{
 		try
 		{
-			$criteria = new ProdutoCriteria();
+			$criteria = new EnderecoEntregaCriteria();
 			
 			// TODO: this will limit results based on all properties included in the filter list 
 			$filter = RequestUtil::Get('filter');
 			if ($filter) $criteria->AddFilter(
-				new CriteriaFilter('Id,Nome,DataValidade,Categoria,Prioridade,QtdMinima,QtdMaxima'
+				new CriteriaFilter('Id,Rua,NroCasa,Bairro,Cidade,Cep,HorarioPreferencial'
 				, '%'.$filter.'%')
 			);
 
@@ -87,18 +87,18 @@ class ProdutoController extends AppBaseController
 				// if page is specified, use this instead (at the expense of one extra count query)
 				$pagesize = $this->GetDefaultPageSize();
 
-				$produtos = $this->Phreezer->Query('Produto',$criteria)->GetDataPage($page, $pagesize);
-				$output->rows = $produtos->ToObjectArray(true,$this->SimpleObjectParams());
-				$output->totalResults = $produtos->TotalResults;
-				$output->totalPages = $produtos->TotalPages;
-				$output->pageSize = $produtos->PageSize;
-				$output->currentPage = $produtos->CurrentPage;
+				$enderecoentregas = $this->Phreezer->Query('EnderecoEntrega',$criteria)->GetDataPage($page, $pagesize);
+				$output->rows = $enderecoentregas->ToObjectArray(true,$this->SimpleObjectParams());
+				$output->totalResults = $enderecoentregas->TotalResults;
+				$output->totalPages = $enderecoentregas->TotalPages;
+				$output->pageSize = $enderecoentregas->PageSize;
+				$output->currentPage = $enderecoentregas->CurrentPage;
 			}
 			else
 			{
 				// return all results
-				$produtos = $this->Phreezer->Query('Produto',$criteria);
-				$output->rows = $produtos->ToObjectArray(true, $this->SimpleObjectParams());
+				$enderecoentregas = $this->Phreezer->Query('EnderecoEntrega',$criteria);
+				$output->rows = $enderecoentregas->ToObjectArray(true, $this->SimpleObjectParams());
 				$output->totalResults = count($output->rows);
 				$output->totalPages = 1;
 				$output->pageSize = $output->totalResults;
@@ -115,15 +115,15 @@ class ProdutoController extends AppBaseController
 	}
 
 	/**
-	 * API Method retrieves a single Produto record and render as JSON
+	 * API Method retrieves a single EnderecoEntrega record and render as JSON
 	 */
 	public function Read()
 	{
 		try
 		{
 			$pk = $this->GetRouter()->GetUrlParam('id');
-			$produto = $this->Phreezer->Get('Produto',$pk);
-			$this->RenderJSON($produto, $this->JSONPCallback(), true, $this->SimpleObjectParams());
+			$enderecoentrega = $this->Phreezer->Get('EnderecoEntrega',$pk);
+			$this->RenderJSON($enderecoentrega, $this->JSONPCallback(), true, $this->SimpleObjectParams());
 		}
 		catch (Exception $ex)
 		{
@@ -132,7 +132,7 @@ class ProdutoController extends AppBaseController
 	}
 
 	/**
-	 * API Method inserts a new Produto record and render response as JSON
+	 * API Method inserts a new EnderecoEntrega record and render response as JSON
 	 */
 	public function Create()
 	{
@@ -146,22 +146,22 @@ class ProdutoController extends AppBaseController
 				throw new Exception('The request body does not contain valid JSON');
 			}
 
-			$produto = new Produto($this->Phreezer);
+			$enderecoentrega = new EnderecoEntrega($this->Phreezer);
 
 			// TODO: any fields that should not be inserted by the user should be commented out
 
 			// this is an auto-increment.  uncomment if updating is allowed
-			// $produto->Id = $this->SafeGetVal($json, 'id');
+			// $enderecoentrega->Id = $this->SafeGetVal($json, 'id');
 
-			$produto->Nome = $this->SafeGetVal($json, 'nome');
-			$produto->DataValidade = date('Y-m-d H:i:s',strtotime($this->SafeGetVal($json, 'dataValidade')));
-			$produto->Categoria = $this->SafeGetVal($json, 'categoria');
-			$produto->Prioridade = $this->SafeGetVal($json, 'prioridade');
-			$produto->QtdMinima = $this->SafeGetVal($json, 'qtdMinima');
-			$produto->QtdMaxima = $this->SafeGetVal($json, 'qtdMaxima');
+			$enderecoentrega->Rua = $this->SafeGetVal($json, 'rua');
+			$enderecoentrega->NroCasa = $this->SafeGetVal($json, 'nroCasa');
+			$enderecoentrega->Bairro = $this->SafeGetVal($json, 'bairro');
+			$enderecoentrega->Cidade = $this->SafeGetVal($json, 'cidade');
+			$enderecoentrega->Cep = $this->SafeGetVal($json, 'cep');
+			$enderecoentrega->HorarioPreferencial = $this->SafeGetVal($json, 'horarioPreferencial');
 
-			$produto->Validate();
-			$errors = $produto->GetValidationErrors();
+			$enderecoentrega->Validate();
+			$errors = $enderecoentrega->GetValidationErrors();
 
 			if (count($errors) > 0)
 			{
@@ -169,8 +169,8 @@ class ProdutoController extends AppBaseController
 			}
 			else
 			{
-				$produto->Save();
-				$this->RenderJSON($produto, $this->JSONPCallback(), true, $this->SimpleObjectParams());
+				$enderecoentrega->Save();
+				$this->RenderJSON($enderecoentrega, $this->JSONPCallback(), true, $this->SimpleObjectParams());
 			}
 
 		}
@@ -181,7 +181,7 @@ class ProdutoController extends AppBaseController
 	}
 
 	/**
-	 * API Method updates an existing Produto record and render response as JSON
+	 * API Method updates an existing EnderecoEntrega record and render response as JSON
 	 */
 	public function Update()
 	{
@@ -196,22 +196,22 @@ class ProdutoController extends AppBaseController
 			}
 
 			$pk = $this->GetRouter()->GetUrlParam('id');
-			$produto = $this->Phreezer->Get('Produto',$pk);
+			$enderecoentrega = $this->Phreezer->Get('EnderecoEntrega',$pk);
 
 			// TODO: any fields that should not be updated by the user should be commented out
 
 			// this is a primary key.  uncomment if updating is allowed
-			// $produto->Id = $this->SafeGetVal($json, 'id', $produto->Id);
+			// $enderecoentrega->Id = $this->SafeGetVal($json, 'id', $enderecoentrega->Id);
 
-			$produto->Nome = $this->SafeGetVal($json, 'nome', $produto->Nome);
-			$produto->DataValidade = date('Y-m-d H:i:s',strtotime($this->SafeGetVal($json, 'dataValidade', $produto->DataValidade)));
-			$produto->Categoria = $this->SafeGetVal($json, 'categoria', $produto->Categoria);
-			$produto->Prioridade = $this->SafeGetVal($json, 'prioridade', $produto->Prioridade);
-			$produto->QtdMinima = $this->SafeGetVal($json, 'qtdMinima', $produto->QtdMinima);
-			$produto->QtdMaxima = $this->SafeGetVal($json, 'qtdMaxima', $produto->QtdMaxima);
+			$enderecoentrega->Rua = $this->SafeGetVal($json, 'rua', $enderecoentrega->Rua);
+			$enderecoentrega->NroCasa = $this->SafeGetVal($json, 'nroCasa', $enderecoentrega->NroCasa);
+			$enderecoentrega->Bairro = $this->SafeGetVal($json, 'bairro', $enderecoentrega->Bairro);
+			$enderecoentrega->Cidade = $this->SafeGetVal($json, 'cidade', $enderecoentrega->Cidade);
+			$enderecoentrega->Cep = $this->SafeGetVal($json, 'cep', $enderecoentrega->Cep);
+			$enderecoentrega->HorarioPreferencial = $this->SafeGetVal($json, 'horarioPreferencial', $enderecoentrega->HorarioPreferencial);
 
-			$produto->Validate();
-			$errors = $produto->GetValidationErrors();
+			$enderecoentrega->Validate();
+			$errors = $enderecoentrega->GetValidationErrors();
 
 			if (count($errors) > 0)
 			{
@@ -219,8 +219,8 @@ class ProdutoController extends AppBaseController
 			}
 			else
 			{
-				$produto->Save();
-				$this->RenderJSON($produto, $this->JSONPCallback(), true, $this->SimpleObjectParams());
+				$enderecoentrega->Save();
+				$this->RenderJSON($enderecoentrega, $this->JSONPCallback(), true, $this->SimpleObjectParams());
 			}
 
 
@@ -234,7 +234,7 @@ class ProdutoController extends AppBaseController
 	}
 
 	/**
-	 * API Method deletes an existing Produto record and render response as JSON
+	 * API Method deletes an existing EnderecoEntrega record and render response as JSON
 	 */
 	public function Delete()
 	{
@@ -244,9 +244,9 @@ class ProdutoController extends AppBaseController
 			// TODO: if a soft delete is prefered, change this to update the deleted flag instead of hard-deleting
 
 			$pk = $this->GetRouter()->GetUrlParam('id');
-			$produto = $this->Phreezer->Get('Produto',$pk);
+			$enderecoentrega = $this->Phreezer->Get('EnderecoEntrega',$pk);
 
-			$produto->Delete();
+			$enderecoentrega->Delete();
 
 			$output = new stdClass();
 

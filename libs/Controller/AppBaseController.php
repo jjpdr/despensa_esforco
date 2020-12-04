@@ -1,5 +1,5 @@
 <?php
-/** @package    Despesnsa Esforço v1.0 ::Controller */
+/** @package    Despesnsa Esforço v2.0 ::Controller */
 
 /** import supporting libraries */
 require_once("verysimple/Phreeze/Controller.php");
@@ -10,7 +10,7 @@ require_once("verysimple/Phreeze/Controller.php");
  * class or any code, however you may use if for application-wide
  * functions such as authentication
  *
- * @package Despesnsa Esforço v1.0 ::Controller
+ * @package Despesnsa Esforço v2.0 ::Controller
  * @author ClassBuilder
  * @version 1.0
  */
