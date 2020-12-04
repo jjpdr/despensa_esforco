@@ -1,5 +1,5 @@
 <?php
-/** @package    Despesnsa Esforço v2.0  */
+/** @package    Despesnsa Esforço v3.0  */
 
 /* GlobalConfig object contains all configuration information for the app */
 include_once("_global_config.php");

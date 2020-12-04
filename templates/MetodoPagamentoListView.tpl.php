@@ -1,5 +1,5 @@
 <?php
-	$this->assign('title','Despesnsa Esforço v2.0  | MetodoPagamentos');
+	$this->assign('title','Despesnsa Esforço v3.0  | MetodoPagamentos');
 	$this->assign('nav','metodopagamentos');
 
 	$this->display('_Header.tpl.php');

@@ -3,10 +3,10 @@
 
 /** import supporting libraries */
 require_once("AppBaseController.php");
-require_once("Model/Categoria.php");
+require_once("Model/SupermercadoFavorito.php");
 
 /**
- * CategoriaController is the controller class for the Categoria object.  The
+ * SupermercadoFavoritoController is the controller class for the SupermercadoFavorito object.  The
  * controller is responsible for processing input from the user, reading/updating
  * the model as necessary and displaying the appropriate view.
  *
@@ -14,7 +14,7 @@ require_once("Model/Categoria.php");
  * @author ClassBuilder
  * @version 1.0
  */
-class CategoriaController extends AppBaseController
+class SupermercadoFavoritoController extends AppBaseController
 {
 
 	/**
@@ -33,7 +33,7 @@ class CategoriaController extends AppBaseController
 	}
 
 	/**
-	 * Displays a list view of Categoria objects
+	 * Displays a list view of SupermercadoFavorito objects
 	 */
 	public function ListView()
 	{
@@ -41,18 +41,18 @@ class CategoriaController extends AppBaseController
 	}
 
 	/**
-	 * API Method queries for Categoria records and render as JSON
+	 * API Method queries for SupermercadoFavorito records and render as JSON
 	 */
 	public function Query()
 	{
 		try
 		{
-			$criteria = new CategoriaCriteria();
+			$criteria = new SupermercadoFavoritoCriteria();
 			
 			// TODO: this will limit results based on all properties included in the filter list 
 			$filter = RequestUtil::Get('filter');
 			if ($filter) $criteria->AddFilter(
-				new CriteriaFilter('Id,NomeCategoria'
+				new CriteriaFilter('Id,Nome,Endereco,Bairro,Cep,Cidade,Estado,DataUltimaCompra'
 				, '%'.$filter.'%')
 			);
 
@@ -87,18 +87,18 @@ class CategoriaController extends AppBaseController
 				// if page is specified, use this instead (at the expense of one extra count query)
 				$pagesize = $this->GetDefaultPageSize();
 
-				$categorias = $this->Phreezer->Query('Categoria',$criteria)->GetDataPage($page, $pagesize);
-				$output->rows = $categorias->ToObjectArray(true,$this->SimpleObjectParams());
-				$output->totalResults = $categorias->TotalResults;
-				$output->totalPages = $categorias->TotalPages;
-				$output->pageSize = $categorias->PageSize;
-				$output->currentPage = $categorias->CurrentPage;
+				$supermercadofavoritos = $this->Phreezer->Query('SupermercadoFavorito',$criteria)->GetDataPage($page, $pagesize);
+				$output->rows = $supermercadofavoritos->ToObjectArray(true,$this->SimpleObjectParams());
+				$output->totalResults = $supermercadofavoritos->TotalResults;
+				$output->totalPages = $supermercadofavoritos->TotalPages;
+				$output->pageSize = $supermercadofavoritos->PageSize;
+				$output->currentPage = $supermercadofavoritos->CurrentPage;
 			}
 			else
 			{
 				// return all results
-				$categorias = $this->Phreezer->Query('Categoria',$criteria);
-				$output->rows = $categorias->ToObjectArray(true, $this->SimpleObjectParams());
+				$supermercadofavoritos = $this->Phreezer->Query('SupermercadoFavorito',$criteria);
+				$output->rows = $supermercadofavoritos->ToObjectArray(true, $this->SimpleObjectParams());
 				$output->totalResults = count($output->rows);
 				$output->totalPages = 1;
 				$output->pageSize = $output->totalResults;
@@ -115,15 +115,15 @@ class CategoriaController extends AppBaseController
 	}
 
 	/**
-	 * API Method retrieves a single Categoria record and render as JSON
+	 * API Method retrieves a single SupermercadoFavorito record and render as JSON
 	 */
 	public function Read()
 	{
 		try
 		{
 			$pk = $this->GetRouter()->GetUrlParam('id');
-			$categoria = $this->Phreezer->Get('Categoria',$pk);
-			$this->RenderJSON($categoria, $this->JSONPCallback(), true, $this->SimpleObjectParams());
+			$supermercadofavorito = $this->Phreezer->Get('SupermercadoFavorito',$pk);
+			$this->RenderJSON($supermercadofavorito, $this->JSONPCallback(), true, $this->SimpleObjectParams());
 		}
 		catch (Exception $ex)
 		{
@@ -132,7 +132,7 @@ class CategoriaController extends AppBaseController
 	}
 
 	/**
-	 * API Method inserts a new Categoria record and render response as JSON
+	 * API Method inserts a new SupermercadoFavorito record and render response as JSON
 	 */
 	public function Create()
 	{
@@ -146,17 +146,23 @@ class CategoriaController extends AppBaseController
 				throw new Exception('The request body does not contain valid JSON');
 			}
 
-			$categoria = new Categoria($this->Phreezer);
+			$supermercadofavorito = new SupermercadoFavorito($this->Phreezer);
 
 			// TODO: any fields that should not be inserted by the user should be commented out
 
 			// this is an auto-increment.  uncomment if updating is allowed
-			// $categoria->Id = $this->SafeGetVal($json, 'id');
+			// $supermercadofavorito->Id = $this->SafeGetVal($json, 'id');
 
-			$categoria->NomeCategoria = $this->SafeGetVal($json, 'nomeCategoria');
+			$supermercadofavorito->Nome = $this->SafeGetVal($json, 'nome');
+			$supermercadofavorito->Endereco = $this->SafeGetVal($json, 'endereco');
+			$supermercadofavorito->Bairro = $this->SafeGetVal($json, 'bairro');
+			$supermercadofavorito->Cep = $this->SafeGetVal($json, 'cep');
+			$supermercadofavorito->Cidade = $this->SafeGetVal($json, 'cidade');
+			$supermercadofavorito->Estado = $this->SafeGetVal($json, 'estado');
+			$supermercadofavorito->DataUltimaCompra = date('Y-m-d H:i:s',strtotime($this->SafeGetVal($json, 'dataUltimaCompra')));
 
-			$categoria->Validate();
-			$errors = $categoria->GetValidationErrors();
+			$supermercadofavorito->Validate();
+			$errors = $supermercadofavorito->GetValidationErrors();
 
 			if (count($errors) > 0)
 			{
@@ -164,8 +170,8 @@ class CategoriaController extends AppBaseController
 			}
 			else
 			{
-				$categoria->Save();
-				$this->RenderJSON($categoria, $this->JSONPCallback(), true, $this->SimpleObjectParams());
+				$supermercadofavorito->Save();
+				$this->RenderJSON($supermercadofavorito, $this->JSONPCallback(), true, $this->SimpleObjectParams());
 			}
 
 		}
@@ -176,7 +182,7 @@ class CategoriaController extends AppBaseController
 	}
 
 	/**
-	 * API Method updates an existing Categoria record and render response as JSON
+	 * API Method updates an existing SupermercadoFavorito record and render response as JSON
 	 */
 	public function Update()
 	{
@@ -191,17 +197,23 @@ class CategoriaController extends AppBaseController
 			}
 
 			$pk = $this->GetRouter()->GetUrlParam('id');
-			$categoria = $this->Phreezer->Get('Categoria',$pk);
+			$supermercadofavorito = $this->Phreezer->Get('SupermercadoFavorito',$pk);
 
 			// TODO: any fields that should not be updated by the user should be commented out
 
 			// this is a primary key.  uncomment if updating is allowed
-			// $categoria->Id = $this->SafeGetVal($json, 'id', $categoria->Id);
+			// $supermercadofavorito->Id = $this->SafeGetVal($json, 'id', $supermercadofavorito->Id);
 
-			$categoria->NomeCategoria = $this->SafeGetVal($json, 'nomeCategoria', $categoria->NomeCategoria);
+			$supermercadofavorito->Nome = $this->SafeGetVal($json, 'nome', $supermercadofavorito->Nome);
+			$supermercadofavorito->Endereco = $this->SafeGetVal($json, 'endereco', $supermercadofavorito->Endereco);
+			$supermercadofavorito->Bairro = $this->SafeGetVal($json, 'bairro', $supermercadofavorito->Bairro);
+			$supermercadofavorito->Cep = $this->SafeGetVal($json, 'cep', $supermercadofavorito->Cep);
+			$supermercadofavorito->Cidade = $this->SafeGetVal($json, 'cidade', $supermercadofavorito->Cidade);
+			$supermercadofavorito->Estado = $this->SafeGetVal($json, 'estado', $supermercadofavorito->Estado);
+			$supermercadofavorito->DataUltimaCompra = date('Y-m-d H:i:s',strtotime($this->SafeGetVal($json, 'dataUltimaCompra', $supermercadofavorito->DataUltimaCompra)));
 
-			$categoria->Validate();
-			$errors = $categoria->GetValidationErrors();
+			$supermercadofavorito->Validate();
+			$errors = $supermercadofavorito->GetValidationErrors();
 
 			if (count($errors) > 0)
 			{
@@ -209,8 +221,8 @@ class CategoriaController extends AppBaseController
 			}
 			else
 			{
-				$categoria->Save();
-				$this->RenderJSON($categoria, $this->JSONPCallback(), true, $this->SimpleObjectParams());
+				$supermercadofavorito->Save();
+				$this->RenderJSON($supermercadofavorito, $this->JSONPCallback(), true, $this->SimpleObjectParams());
 			}
 
 
@@ -224,7 +236,7 @@ class CategoriaController extends AppBaseController
 	}
 
 	/**
-	 * API Method deletes an existing Categoria record and render response as JSON
+	 * API Method deletes an existing SupermercadoFavorito record and render response as JSON
 	 */
 	public function Delete()
 	{
@@ -234,9 +246,9 @@ class CategoriaController extends AppBaseController
 			// TODO: if a soft delete is prefered, change this to update the deleted flag instead of hard-deleting
 
 			$pk = $this->GetRouter()->GetUrlParam('id');
-			$categoria = $this->Phreezer->Get('Categoria',$pk);
+			$supermercadofavorito = $this->Phreezer->Get('SupermercadoFavorito',$pk);
 
-			$categoria->Delete();
+			$supermercadofavorito->Delete();
 
 			$output = new stdClass();
 

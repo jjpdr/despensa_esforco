@@ -1,6 +1,6 @@
 <?php
 /**
- * @package Despesnsa Esforço v2.0 
+ * @package Despesnsa Esforço v3.0 
  *
  * MACHINE-SPECIFIC CONFIGURATION SETTINGS
  *
@@ -25,8 +25,8 @@ GlobalConfig::$CONNECTION_SETTING->Charset = "utf8";
 GlobalConfig::$CONNECTION_SETTING->Multibyte = true;
 // GlobalConfig::$CONNECTION_SETTING->BootstrapSQL = "SET SQL_BIG_SELECTS=1";
 
-/** the root url of the application with trailing slash, for example http://localhost/despesnsa esforço v2.0 / */
-GlobalConfig::$ROOT_URL = RequestUtil::GetServerRootUrl() . 'despensaesforco_v20/';
+/** the root url of the application with trailing slash, for example http://localhost/despesnsa esforço v3.0 / */
+GlobalConfig::$ROOT_URL = RequestUtil::GetServerRootUrl() . 'despensaesforco_v30/';
 
 /** timezone */
 // date_default_timezone_set("UTC");
