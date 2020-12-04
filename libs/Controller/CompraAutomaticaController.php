@@ -3,10 +3,10 @@
 
 /** import supporting libraries */
 require_once("AppBaseController.php");
-require_once("Model/Categoria.php");
+require_once("Model/CompraAutomatica.php");
 
 /**
- * CategoriaController is the controller class for the Categoria object.  The
+ * CompraAutomaticaController is the controller class for the CompraAutomatica object.  The
  * controller is responsible for processing input from the user, reading/updating
  * the model as necessary and displaying the appropriate view.
  *
@@ -14,7 +14,7 @@ require_once("Model/Categoria.php");
  * @author ClassBuilder
  * @version 1.0
  */
-class CategoriaController extends AppBaseController
+class CompraAutomaticaController extends AppBaseController
 {
 
 	/**
@@ -33,7 +33,7 @@ class CategoriaController extends AppBaseController
 	}
 
 	/**
-	 * Displays a list view of Categoria objects
+	 * Displays a list view of CompraAutomatica objects
 	 */
 	public function ListView()
 	{
@@ -41,18 +41,18 @@ class CategoriaController extends AppBaseController
 	}
 
 	/**
-	 * API Method queries for Categoria records and render as JSON
+	 * API Method queries for CompraAutomatica records and render as JSON
 	 */
 	public function Query()
 	{
 		try
 		{
-			$criteria = new CategoriaCriteria();
+			$criteria = new CompraAutomaticaCriteria();
 			
 			// TODO: this will limit results based on all properties included in the filter list 
 			$filter = RequestUtil::Get('filter');
 			if ($filter) $criteria->AddFilter(
-				new CriteriaFilter('Id,NomeCategoria'
+				new CriteriaFilter('Id,NomeSupermercado,Categoria,Prioridade,ValorMaximo,MetodoPagamento,EnderecoEntrega'
 				, '%'.$filter.'%')
 			);
 
@@ -87,18 +87,18 @@ class CategoriaController extends AppBaseController
 				// if page is specified, use this instead (at the expense of one extra count query)
 				$pagesize = $this->GetDefaultPageSize();
 
-				$categorias = $this->Phreezer->Query('Categoria',$criteria)->GetDataPage($page, $pagesize);
-				$output->rows = $categorias->ToObjectArray(true,$this->SimpleObjectParams());
-				$output->totalResults = $categorias->TotalResults;
-				$output->totalPages = $categorias->TotalPages;
-				$output->pageSize = $categorias->PageSize;
-				$output->currentPage = $categorias->CurrentPage;
+				$compraautomaticas = $this->Phreezer->Query('CompraAutomatica',$criteria)->GetDataPage($page, $pagesize);
+				$output->rows = $compraautomaticas->ToObjectArray(true,$this->SimpleObjectParams());
+				$output->totalResults = $compraautomaticas->TotalResults;
+				$output->totalPages = $compraautomaticas->TotalPages;
+				$output->pageSize = $compraautomaticas->PageSize;
+				$output->currentPage = $compraautomaticas->CurrentPage;
 			}
 			else
 			{
 				// return all results
-				$categorias = $this->Phreezer->Query('Categoria',$criteria);
-				$output->rows = $categorias->ToObjectArray(true, $this->SimpleObjectParams());
+				$compraautomaticas = $this->Phreezer->Query('CompraAutomatica',$criteria);
+				$output->rows = $compraautomaticas->ToObjectArray(true, $this->SimpleObjectParams());
 				$output->totalResults = count($output->rows);
 				$output->totalPages = 1;
 				$output->pageSize = $output->totalResults;
@@ -115,15 +115,15 @@ class CategoriaController extends AppBaseController
 	}
 
 	/**
-	 * API Method retrieves a single Categoria record and render as JSON
+	 * API Method retrieves a single CompraAutomatica record and render as JSON
 	 */
 	public function Read()
 	{
 		try
 		{
 			$pk = $this->GetRouter()->GetUrlParam('id');
-			$categoria = $this->Phreezer->Get('Categoria',$pk);
-			$this->RenderJSON($categoria, $this->JSONPCallback(), true, $this->SimpleObjectParams());
+			$compraautomatica = $this->Phreezer->Get('CompraAutomatica',$pk);
+			$this->RenderJSON($compraautomatica, $this->JSONPCallback(), true, $this->SimpleObjectParams());
 		}
 		catch (Exception $ex)
 		{
@@ -132,7 +132,7 @@ class CategoriaController extends AppBaseController
 	}
 
 	/**
-	 * API Method inserts a new Categoria record and render response as JSON
+	 * API Method inserts a new CompraAutomatica record and render response as JSON
 	 */
 	public function Create()
 	{
@@ -146,17 +146,22 @@ class CategoriaController extends AppBaseController
 				throw new Exception('The request body does not contain valid JSON');
 			}
 
-			$categoria = new Categoria($this->Phreezer);
+			$compraautomatica = new CompraAutomatica($this->Phreezer);
 
 			// TODO: any fields that should not be inserted by the user should be commented out
 
 			// this is an auto-increment.  uncomment if updating is allowed
-			// $categoria->Id = $this->SafeGetVal($json, 'id');
+			// $compraautomatica->Id = $this->SafeGetVal($json, 'id');
 
-			$categoria->NomeCategoria = $this->SafeGetVal($json, 'nomeCategoria');
+			$compraautomatica->NomeSupermercado = $this->SafeGetVal($json, 'nomeSupermercado');
+			$compraautomatica->Categoria = $this->SafeGetVal($json, 'categoria');
+			$compraautomatica->Prioridade = $this->SafeGetVal($json, 'prioridade');
+			$compraautomatica->ValorMaximo = $this->SafeGetVal($json, 'valorMaximo');
+			$compraautomatica->MetodoPagamento = $this->SafeGetVal($json, 'metodoPagamento');
+			$compraautomatica->EnderecoEntrega = $this->SafeGetVal($json, 'enderecoEntrega');
 
-			$categoria->Validate();
-			$errors = $categoria->GetValidationErrors();
+			$compraautomatica->Validate();
+			$errors = $compraautomatica->GetValidationErrors();
 
 			if (count($errors) > 0)
 			{
@@ -164,8 +169,8 @@ class CategoriaController extends AppBaseController
 			}
 			else
 			{
-				$categoria->Save();
-				$this->RenderJSON($categoria, $this->JSONPCallback(), true, $this->SimpleObjectParams());
+				$compraautomatica->Save();
+				$this->RenderJSON($compraautomatica, $this->JSONPCallback(), true, $this->SimpleObjectParams());
 			}
 
 		}
@@ -176,7 +181,7 @@ class CategoriaController extends AppBaseController
 	}
 
 	/**
-	 * API Method updates an existing Categoria record and render response as JSON
+	 * API Method updates an existing CompraAutomatica record and render response as JSON
 	 */
 	public function Update()
 	{
@@ -191,17 +196,22 @@ class CategoriaController extends AppBaseController
 			}
 
 			$pk = $this->GetRouter()->GetUrlParam('id');
-			$categoria = $this->Phreezer->Get('Categoria',$pk);
+			$compraautomatica = $this->Phreezer->Get('CompraAutomatica',$pk);
 
 			// TODO: any fields that should not be updated by the user should be commented out
 
 			// this is a primary key.  uncomment if updating is allowed
-			// $categoria->Id = $this->SafeGetVal($json, 'id', $categoria->Id);
+			// $compraautomatica->Id = $this->SafeGetVal($json, 'id', $compraautomatica->Id);
 
-			$categoria->NomeCategoria = $this->SafeGetVal($json, 'nomeCategoria', $categoria->NomeCategoria);
+			$compraautomatica->NomeSupermercado = $this->SafeGetVal($json, 'nomeSupermercado', $compraautomatica->NomeSupermercado);
+			$compraautomatica->Categoria = $this->SafeGetVal($json, 'categoria', $compraautomatica->Categoria);
+			$compraautomatica->Prioridade = $this->SafeGetVal($json, 'prioridade', $compraautomatica->Prioridade);
+			$compraautomatica->ValorMaximo = $this->SafeGetVal($json, 'valorMaximo', $compraautomatica->ValorMaximo);
+			$compraautomatica->MetodoPagamento = $this->SafeGetVal($json, 'metodoPagamento', $compraautomatica->MetodoPagamento);
+			$compraautomatica->EnderecoEntrega = $this->SafeGetVal($json, 'enderecoEntrega', $compraautomatica->EnderecoEntrega);
 
-			$categoria->Validate();
-			$errors = $categoria->GetValidationErrors();
+			$compraautomatica->Validate();
+			$errors = $compraautomatica->GetValidationErrors();
 
 			if (count($errors) > 0)
 			{
@@ -209,8 +219,8 @@ class CategoriaController extends AppBaseController
 			}
 			else
 			{
-				$categoria->Save();
-				$this->RenderJSON($categoria, $this->JSONPCallback(), true, $this->SimpleObjectParams());
+				$compraautomatica->Save();
+				$this->RenderJSON($compraautomatica, $this->JSONPCallback(), true, $this->SimpleObjectParams());
 			}
 
 
@@ -224,7 +234,7 @@ class CategoriaController extends AppBaseController
 	}
 
 	/**
-	 * API Method deletes an existing Categoria record and render response as JSON
+	 * API Method deletes an existing CompraAutomatica record and render response as JSON
 	 */
 	public function Delete()
 	{
@@ -234,9 +244,9 @@ class CategoriaController extends AppBaseController
 			// TODO: if a soft delete is prefered, change this to update the deleted flag instead of hard-deleting
 
 			$pk = $this->GetRouter()->GetUrlParam('id');
-			$categoria = $this->Phreezer->Get('Categoria',$pk);
+			$compraautomatica = $this->Phreezer->Get('CompraAutomatica',$pk);
 
-			$categoria->Delete();
+			$compraautomatica->Delete();
 
 			$output = new stdClass();
 

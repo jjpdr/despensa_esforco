@@ -1,5 +1,5 @@
 <?php
-	$this->assign('title','Despesnsa Esforço v2.0  | Categorias');
+	$this->assign('title','Despesnsa Esforço v3.0  | Categorias');
 	$this->assign('nav','categorias');
 
 	$this->display('_Header.tpl.php');

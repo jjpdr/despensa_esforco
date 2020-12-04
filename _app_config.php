@@ -1,6 +1,6 @@
 <?php
 /**
- * @package Despesnsa Esforço v2.0 
+ * @package Despesnsa Esforço v3.0 
  *
  * APPLICATION-WIDE CONFIGURATION SETTINGS
  *

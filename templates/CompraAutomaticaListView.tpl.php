@@ -1,12 +1,12 @@
 <?php
-	$this->assign('title','Despesnsa Esforço v3.0  | Produtos');
-	$this->assign('nav','produtos');
+	$this->assign('title','Despesnsa Esforço v3.0  | CompraAutomaticas');
+	$this->assign('nav','compraautomaticas');
 
 	$this->display('_Header.tpl.php');
 ?>
 
 <script type="text/javascript">
-	$LAB.script("scripts/app/produtos.js").wait(function(){
+	$LAB.script("scripts/app/compraautomaticas.js").wait(function(){
 		$(document).ready(function(){
 			page.init();
 		});
@@ -21,7 +21,7 @@
 <div class="container">
 
 <h1>
-	<i class="icon-th-list"></i> Produtos
+	<i class="icon-th-list"></i> CompraAutomaticas
 	<span id=loader class="loader progress progress-striped active"><span class="bar"></span></span>
 	<span class='input-append pull-right searchContainer'>
 		<input id='filter' type="text" placeholder="Search..." />
@@ -30,18 +30,18 @@
 </h1>
 
 	<!-- underscore template for the collection -->
-	<script type="text/template" id="produtoCollectionTemplate">
+	<script type="text/template" id="compraAutomaticaCollectionTemplate">
 		<table class="collection table table-bordered table-hover">
 		<thead>
 			<tr>
 				<th id="header_Id">Id<% if (page.orderBy == 'Id') { %> <i class='icon-arrow-<%= page.orderDesc ? 'up' : 'down' %>' /><% } %></th>
-				<th id="header_Nome">Nome<% if (page.orderBy == 'Nome') { %> <i class='icon-arrow-<%= page.orderDesc ? 'up' : 'down' %>' /><% } %></th>
-				<th id="header_DataValidade">Data Validade<% if (page.orderBy == 'DataValidade') { %> <i class='icon-arrow-<%= page.orderDesc ? 'up' : 'down' %>' /><% } %></th>
+				<th id="header_NomeSupermercado">Nome Supermercado<% if (page.orderBy == 'NomeSupermercado') { %> <i class='icon-arrow-<%= page.orderDesc ? 'up' : 'down' %>' /><% } %></th>
 				<th id="header_Categoria">Categoria<% if (page.orderBy == 'Categoria') { %> <i class='icon-arrow-<%= page.orderDesc ? 'up' : 'down' %>' /><% } %></th>
 				<th id="header_Prioridade">Prioridade<% if (page.orderBy == 'Prioridade') { %> <i class='icon-arrow-<%= page.orderDesc ? 'up' : 'down' %>' /><% } %></th>
+				<th id="header_ValorMaximo">Valor Maximo<% if (page.orderBy == 'ValorMaximo') { %> <i class='icon-arrow-<%= page.orderDesc ? 'up' : 'down' %>' /><% } %></th>
 <!-- UNCOMMENT TO SHOW ADDITIONAL COLUMNS
-				<th id="header_QtdMinima">Qtd Minima<% if (page.orderBy == 'QtdMinima') { %> <i class='icon-arrow-<%= page.orderDesc ? 'up' : 'down' %>' /><% } %></th>
-				<th id="header_QtdMaxima">Qtd Maxima<% if (page.orderBy == 'QtdMaxima') { %> <i class='icon-arrow-<%= page.orderDesc ? 'up' : 'down' %>' /><% } %></th>
+				<th id="header_MetodoPagamento">Metodo Pagamento<% if (page.orderBy == 'MetodoPagamento') { %> <i class='icon-arrow-<%= page.orderDesc ? 'up' : 'down' %>' /><% } %></th>
+				<th id="header_EnderecoEntrega">Endereco Entrega<% if (page.orderBy == 'EnderecoEntrega') { %> <i class='icon-arrow-<%= page.orderDesc ? 'up' : 'down' %>' /><% } %></th>
 -->
 			</tr>
 		</thead>
@@ -49,13 +49,13 @@
 		<% items.each(function(item) { %>
 			<tr id="<%= _.escape(item.get('id')) %>">
 				<td><%= _.escape(item.get('id') || '') %></td>
-				<td><%= _.escape(item.get('nome') || '') %></td>
-				<td><%if (item.get('dataValidade')) { %><%= _date(app.parseDate(item.get('dataValidade'))).format('MMM D, YYYY') %><% } else { %>NULL<% } %></td>
+				<td><%= _.escape(item.get('nomeSupermercado') || '') %></td>
 				<td><%= _.escape(item.get('categoria') || '') %></td>
 				<td><%= _.escape(item.get('prioridade') || '') %></td>
+				<td><%= _.escape(item.get('valorMaximo') || '') %></td>
 <!-- UNCOMMENT TO SHOW ADDITIONAL COLUMNS
-				<td><%= _.escape(item.get('qtdMinima') || '') %></td>
-				<td><%= _.escape(item.get('qtdMaxima') || '') %></td>
+				<td><%= _.escape(item.get('metodoPagamento') || '') %></td>
+				<td><%= _.escape(item.get('enderecoEntrega') || '') %></td>
 -->
 			</tr>
 		<% }); %>
@@ -66,7 +66,7 @@
 	</script>
 
 	<!-- underscore template for the model -->
-	<script type="text/template" id="produtoModelTemplate">
+	<script type="text/template" id="compraAutomaticaModelTemplate">
 		<form class="form-horizontal" onsubmit="return false;">
 			<fieldset>
 				<div id="idInputContainer" class="control-group">
@@ -76,20 +76,10 @@
 						<span class="help-inline"></span>
 					</div>
 				</div>
-				<div id="nomeInputContainer" class="control-group">
-					<label class="control-label" for="nome">Nome</label>
+				<div id="nomeSupermercadoInputContainer" class="control-group">
+					<label class="control-label" for="nomeSupermercado">Nome Supermercado</label>
 					<div class="controls inline-inputs">
-						<input type="text" class="input-xlarge" id="nome" placeholder="Nome" value="<%= _.escape(item.get('nome') || '') %>">
-						<span class="help-inline"></span>
-					</div>
-				</div>
-				<div id="dataValidadeInputContainer" class="control-group">
-					<label class="control-label" for="dataValidade">Data Validade</label>
-					<div class="controls inline-inputs">
-						<div class="input-append date date-picker" data-date-format="yyyy-mm-dd">
-							<input id="dataValidade" type="text" value="<%= _date(app.parseDate(item.get('dataValidade'))).format('YYYY-MM-DD') %>" />
-							<span class="add-on"><i class="icon-calendar"></i></span>
-						</div>
+						<input type="text" class="input-xlarge" id="nomeSupermercado" placeholder="Nome Supermercado" value="<%= _.escape(item.get('nomeSupermercado') || '') %>">
 						<span class="help-inline"></span>
 					</div>
 				</div>
@@ -107,17 +97,24 @@
 						<span class="help-inline"></span>
 					</div>
 				</div>
-				<div id="qtdMinimaInputContainer" class="control-group">
-					<label class="control-label" for="qtdMinima">Qtd Minima</label>
+				<div id="valorMaximoInputContainer" class="control-group">
+					<label class="control-label" for="valorMaximo">Valor Maximo</label>
 					<div class="controls inline-inputs">
-						<input type="text" class="input-xlarge" id="qtdMinima" placeholder="Qtd Minima" value="<%= _.escape(item.get('qtdMinima') || '') %>">
+						<input type="text" class="input-xlarge" id="valorMaximo" placeholder="Valor Maximo" value="<%= _.escape(item.get('valorMaximo') || '') %>">
 						<span class="help-inline"></span>
 					</div>
 				</div>
-				<div id="qtdMaximaInputContainer" class="control-group">
-					<label class="control-label" for="qtdMaxima">Qtd Maxima</label>
+				<div id="metodoPagamentoInputContainer" class="control-group">
+					<label class="control-label" for="metodoPagamento">Metodo Pagamento</label>
 					<div class="controls inline-inputs">
-						<input type="text" class="input-xlarge" id="qtdMaxima" placeholder="Qtd Maxima" value="<%= _.escape(item.get('qtdMaxima') || '') %>">
+						<input type="text" class="input-xlarge" id="metodoPagamento" placeholder="Metodo Pagamento" value="<%= _.escape(item.get('metodoPagamento') || '') %>">
+						<span class="help-inline"></span>
+					</div>
+				</div>
+				<div id="enderecoEntregaInputContainer" class="control-group">
+					<label class="control-label" for="enderecoEntrega">Endereco Entrega</label>
+					<div class="controls inline-inputs">
+						<input type="text" class="input-xlarge" id="enderecoEntrega" placeholder="Endereco Entrega" value="<%= _.escape(item.get('enderecoEntrega') || '') %>">
 						<span class="help-inline"></span>
 					</div>
 				</div>
@@ -125,15 +122,15 @@
 		</form>
 
 		<!-- delete button is is a separate form to prevent enter key from triggering a delete -->
-		<form id="deleteProdutoButtonContainer" class="form-horizontal" onsubmit="return false;">
+		<form id="deleteCompraAutomaticaButtonContainer" class="form-horizontal" onsubmit="return false;">
 			<fieldset>
 				<div class="control-group">
 					<label class="control-label"></label>
 					<div class="controls">
-						<button id="deleteProdutoButton" class="btn btn-mini btn-danger"><i class="icon-trash icon-white"></i> Delete Produto</button>
-						<span id="confirmDeleteProdutoContainer" class="hide">
-							<button id="cancelDeleteProdutoButton" class="btn btn-mini">Cancel</button>
-							<button id="confirmDeleteProdutoButton" class="btn btn-mini btn-danger">Confirm</button>
+						<button id="deleteCompraAutomaticaButton" class="btn btn-mini btn-danger"><i class="icon-trash icon-white"></i> Delete CompraAutomatica</button>
+						<span id="confirmDeleteCompraAutomaticaContainer" class="hide">
+							<button id="cancelDeleteCompraAutomaticaButton" class="btn btn-mini">Cancel</button>
+							<button id="confirmDeleteCompraAutomaticaButton" class="btn btn-mini btn-danger">Confirm</button>
 						</span>
 					</div>
 				</div>
@@ -142,31 +139,31 @@
 	</script>
 
 	<!-- modal edit dialog -->
-	<div class="modal hide fade" id="produtoDetailDialog">
+	<div class="modal hide fade" id="compraAutomaticaDetailDialog">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">&times;</a>
 			<h3>
-				<i class="icon-edit"></i> Edit Produto
+				<i class="icon-edit"></i> Edit CompraAutomatica
 				<span id="modelLoader" class="loader progress progress-striped active"><span class="bar"></span></span>
 			</h3>
 		</div>
 		<div class="modal-body">
 			<div id="modelAlert"></div>
-			<div id="produtoModelContainer"></div>
+			<div id="compraAutomaticaModelContainer"></div>
 		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" >Cancel</button>
-			<button id="saveProdutoButton" class="btn btn-primary">Save Changes</button>
+			<button id="saveCompraAutomaticaButton" class="btn btn-primary">Save Changes</button>
 		</div>
 	</div>
 
 	<div id="collectionAlert"></div>
 	
-	<div id="produtoCollectionContainer" class="collectionContainer">
+	<div id="compraAutomaticaCollectionContainer" class="collectionContainer">
 	</div>
 
 	<p id="newButtonContainer" class="buttonContainer">
-		<button id="newProdutoButton" class="btn btn-primary">Add Produto</button>
+		<button id="newCompraAutomaticaButton" class="btn btn-primary">Add CompraAutomatica</button>
 	</p>
 
 </div> <!-- /container -->

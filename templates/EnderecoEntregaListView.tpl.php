@@ -1,5 +1,5 @@
 <?php
-	$this->assign('title','Despesnsa Esforço v2.0  | EnderecoEntregas');
+	$this->assign('title','Despesnsa Esforço v3.0  | EnderecoEntregas');
 	$this->assign('nav','enderecoentregas');
 
 	$this->display('_Header.tpl.php');
