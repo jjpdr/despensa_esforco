@@ -1,5 +1,5 @@
 <?php
-	$this->assign('title','Despesnsa Esforço v1.0  | Produtos');
+	$this->assign('title','Despesnsa Esforço v2.0  | Produtos');
 	$this->assign('nav','produtos');
 
 	$this->display('_Header.tpl.php');
