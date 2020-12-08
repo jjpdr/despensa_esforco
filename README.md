@@ -1,7 +1,7 @@
-# despensa_esforco
-COM210 - Engenharia de Software I - Universidade Federal de Itajubá - 2020
+# Despensa Esforço
+## COM210 - Engenharia de Software I - Universidade Federal de Itajubá - 2020
 
-## Integrantes:
+### Integrantes:
 * Carlos Henrique Silva Pinto (2020032622)
 * João Pedro Marcelino de Sousa (2018006008)
 * Lucas Lima Lordello (2019015941)
